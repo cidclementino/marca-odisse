@@ -1,0 +1,62 @@
+{
+  "versao": 1,
+  "atualizado": "2026-11-11",
+  "nome": "Odisse",
+  "nome_completo": "Odisse, Estúdio de Arquitetura e Design",
+  "nome_completo_en": "Odisse, Architecture and Design Studio",
+  "descricao": "Estúdio de arquitetura e design em João Pessoa. Projetos de arquitetura, interiores, objetos autorais e pesquisa editorial.",
+  "descricao_en": "Architecture and design studio in João Pessoa, Brazil. Architecture, interiors, original objects and editorial research.",
+  "fundadores": [
+    "Cid Clementino",
+    "Nathalia Linhares"
+  ],
+  "contato": {
+    "email": "contato@odisse.com.br",
+    "telefone": "+55 83 99122-3088",
+    "whatsapp": "5583991223088",
+    "whatsapp_link": "https://wa.me/5583991223088"
+  },
+  "endereco": {
+    "logradouro": "Rua Bananeiras, nº 361 – Sala 107",
+    "bairro": "Manaíra",
+    "cidade": "João Pessoa",
+    "uf": "PB",
+    "cep": "58.038-170",
+    "caixa_postal": "393",
+    "pais": "BR"
+  },
+  "redes": {
+    "instagram": "https://www.instagram.com/odisseestudio/",
+    "tiktok": "https://www.tiktok.com/@odisse.estudio",
+    "youtube": "https://www.youtube.com/@odisseestudio",
+    "substack": "https://odisse.substack.com/"
+  },
+  "sites": {
+    "institucional": "https://www.odisse.com.br/",
+    "projetos": "https://projetos.odisse.com.br/",
+    "herma": "https://herma.odisse.com.br/",
+    "objetos": "https://www.odisseobjetos.com/"
+  },
+  "nucleos": [
+    {
+      "id": "estudio",
+      "nome": "Odisse Estúdio",
+      "conteudo": "Pessoas, obras e bastidores"
+    },
+    {
+      "id": "arquitetos",
+      "nome": "Odisse Arquitetos",
+      "conteudo": "Projetos de arquitetura e interiores"
+    },
+    {
+      "id": "objetos",
+      "nome": "Odisse Objetos",
+      "conteudo": "Peças autorais e loja"
+    },
+    {
+      "id": "elaia",
+      "nome": "Odisse Elaia",
+      "conteudo": "Ensaios e podcast"
+    }
+  ]
+}

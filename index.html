@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marca Odisse</title>
+<meta name="description" content="Logos, cores, tipografia e dados institucionais do Odisse, Estúdio de Arquitetura e Design.">
+<link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon/favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="stylesheet" href="v1/marca.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--odisse-fundo); color: var(--odisse-tinta);
+    font: 400 16px/1.55 var(--odisse-fonte); -webkit-font-smoothing: antialiased;
+  }
+  .pagina { max-width: 1120px; margin: 0 auto; padding: 56px 32px 96px; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+    padding-bottom: 32px; border-bottom: 1px solid var(--odisse-areia); }
+  header img { height: 56px; display: block; }
+  header p { margin: 0; font-size: 14px; text-align: right; opacity: .75; }
+  nav { display: flex; gap: 20px; flex-wrap: wrap; padding: 16px 0 0; font-size: 13px;
+    letter-spacing: .06em; text-transform: uppercase; }
+  nav a { color: inherit; text-decoration: none; opacity: .7; }
+  nav a:hover { opacity: 1; }
+  section { padding-top: 64px; }
+  h2 { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 8px; }
+  .lead { margin: 0 0 24px; max-width: 640px; opacity: .8; }
+  .lead a { color: inherit; }
+  code, pre { font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 13px; }
+  pre { background: var(--odisse-nevoa); padding: 16px 18px; border-radius: 6px; overflow-x: auto; margin: 0 0 12px; }
+
+  .cores { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+  .cor { display: flex; flex-direction: column; justify-content: flex-start; align-self: start; border: 0; padding: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .cor span.amostra { display: block; height: 96px; border-radius: 6px; border: 1px solid rgba(0,0,0,.06); }
+  .cor b { display: block; font-weight: 600; font-size: 14px; margin-top: 8px; }
+  .cor small { display: block; font-size: 12px; opacity: .7; }
+
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+  .peca { display: flex; flex-direction: column; gap: 8px; }
+  .peca .quadro { aspect-ratio: 1; display: grid; place-items: center; border-radius: 6px;
+    background: var(--odisse-branco); border: 1px solid var(--odisse-areia); overflow: hidden; }
+  .peca .quadro img { width: 100%; height: 100%; object-fit: contain; }
+  .peca .quadro.mono { color: var(--odisse-ardosia); padding: 28px; }
+  .peca .quadro.mono svg { width: 100%; height: 100%; }
+  .peca .nome { font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
+  .peca a { color: inherit; font-size: 12px; opacity: .7; }
+
+  .tipo { display: grid; gap: 4px; }
+  .tipo .g { font-size: 56px; font-weight: 300; letter-spacing: -.02em; line-height: 1.1; }
+  .tipo .pesos { display: flex; gap: 20px; flex-wrap: wrap; font-size: 20px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  td, th { text-align: left; padding: 10px 0; border-bottom: 1px solid var(--odisse-areia); vertical-align: top; }
+  th { width: 220px; font-weight: 500; opacity: .7; }
+  td a { color: inherit; }
+
+  .aviso { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--odisse-ardosia); color: var(--odisse-branco); padding: 10px 16px; border-radius: 6px;
+    font-size: 14px; opacity: 0; transition: .2s; pointer-events: none; }
+  .aviso.on { opacity: 1; transform: translateX(-50%); }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--odisse-areia); font-size: 13px; opacity: .7; }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <header>
+    <span id="logo-topo" role="img" aria-label="Odisse" style="display:block;height:44px;width:206px"></span>
+    <p>Marca — logos, cores, tipografia e dados<br>institucionais do Odisse</p>
+  </header>
+  <nav>
+    <a href="#cores">Cores</a><a href="#tipografia">Tipografia</a><a href="#logos">Logos</a>
+    <a href="#selos">Selos</a><a href="#favicon">Favicon</a><a href="#dados">Dados</a><a href="#uso">Como usar</a>
+  </nav>
+
+  <section id="cores">
+    <h2>Cores</h2>
+    <p class="lead">Clique numa cor para copiar o código. Nos sites, use as variáveis do <code>marca.css</code> em vez do código.</p>
+    <div class="cores" id="lista-cores"></div>
+  </section>
+
+  <section id="tipografia">
+    <h2>Tipografia</h2>
+    <p class="lead">Inter, variável (pesos 100 a 900), servida junto com o <code>marca.css</code>.</p>
+    <div class="tipo">
+      <div class="g">Arquitetura e design entre memória e potencialidade</div>
+      <div class="pesos"><span style="font-weight:300">Leve 300</span><span style="font-weight:400">Regular 400</span><span style="font-weight:500">Médio 500</span><span style="font-weight:600">Seminegrito 600</span><span style="font-weight:700">Negrito 700</span></div>
+    </div>
+  </section>
+
+  <section id="logos">
+    <h2>Logos</h2>
+    <p class="lead">O logo completo, os logotipos de uma cor (assumem a cor do texto ao redor quando colados no HTML) e as assinaturas quadradas de cada núcleo.</p>
+    <div class="grade" id="lista-logos"></div>
+  </section>
+
+  <section id="selos">
+    <h2>Selos</h2>
+    <p class="lead">Um selo por núcleo, em uma cor: mão (Estúdio), roda (Arquitetos), flor (Objetos), sol (Elaia).</p>
+    <div class="grade" id="lista-selos"></div>
+  </section>
+
+  <section id="favicon">
+    <h2>Favicon</h2>
+    <div class="grade" id="lista-favicon"></div>
+  </section>
+
+  <section id="dados">
+    <h2>Dados institucionais</h2>
+    <p class="lead">Lidos do <a href="odisse.json"><code>odisse.json</code></a>. Os sites leem o mesmo arquivo: mudou aqui, muda em todos.</p>
+    <table id="tabela-dados"></table>
+  </section>
+
+  <section id="uso">
+    <h2>Como usar</h2>
+    <p class="lead">Cores e fonte, em qualquer site:</p>
+    <pre>&lt;link rel="stylesheet" href="https://marca.odisse.com.br/v1/marca.css"&gt;
+
+body { font-family: var(--odisse-fonte); color: var(--odisse-tinta); }</pre>
+    <p class="lead">Dados institucionais, por JavaScript:</p>
+    <pre>const odisse = await fetch('https://marca.odisse.com.br/odisse.json').then(r =&gt; r.json());
+link.href = odisse.contato.whatsapp_link;</pre>
+    <p class="lead">Logos e favicon, direto pelo endereço:</p>
+    <pre>&lt;img src="https://marca.odisse.com.br/logos/logotipo-odisse.svg" alt="Odisse"&gt;
+&lt;link rel="icon" href="https://marca.odisse.com.br/favicon/favicon.svg" type="image/svg+xml"&gt;</pre>
+  </section>
+
+  <footer>Odisse, Estúdio de Arquitetura e Design · repositório <a href="https://github.com/cidclementino/marca-odisse" style="color:inherit">marca-odisse</a></footer>
+</div>
+<div class="aviso" id="aviso"></div>
+
+<script>
+const CORES = [
+  ['ardosia', 'Ardósia', '#3F4B57'], ['papel', 'Papel', '#FAFAF7'], ['areia', 'Areia', '#E3D9C6'],
+  ['nevoa', 'Névoa', '#E6E8EB'], ['grafite', 'Grafite', '#2E3036'], ['pessego', 'Pêssego', '#F2DDBE'],
+  ['ocre', 'Ocre', '#BB8248'], ['ambar', 'Âmbar', '#ECC28F'], ['terra', 'Terra', '#4A3726'], ['branco', 'Branco', '#FFFFFF'],
+];
+const LOGOS = [
+  ['odisse.svg', 'Logo completo', false],
+  ['logotipo-odisse.svg', 'Logotipo Odisse', true],
+  ['logotipo-elaia.svg', 'Logotipo Elaia', true],
+  ['odisse-estudio-01.svg', 'Estúdio 01', false], ['odisse-estudio-02.svg', 'Estúdio 02', false],
+  ['odisse-arquitetos-01.svg', 'Arquitetos 01', false], ['odisse-objetos-01.svg', 'Objetos 01', false],
+  ['odisse-elaia-01.svg', 'Elaia 01', false], ['odisse-elaia-02.svg', 'Elaia 02', false],
+];
+const SELOS = [['mao', 'Mão · Estúdio'], ['roda', 'Roda · Arquitetos'], ['flor', 'Flor · Objetos'], ['sol', 'Sol · Elaia']];
+const FAVICON = ['favicon.svg', 'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png', 'apple-touch-icon.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png'];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function avisar(t) { const a = $('aviso'); a.textContent = t; a.classList.add('on'); clearTimeout(avisar.t); avisar.t = setTimeout(() => a.classList.remove('on'), 1600); }
+async function copiar(t) { try { await navigator.clipboard.writeText(t); avisar('Copiado: ' + t); } catch { avisar(t); } }
+
+$('lista-cores').innerHTML = CORES.map(([id, nome, hex]) =>
+  `<button class="cor" data-c="${hex}"><span class="amostra" style="background:var(--odisse-${id})"></span><b>${nome}</b><small>${hex} · --odisse-${id}</small></button>`).join('');
+$('lista-cores').addEventListener('click', (e) => { const b = e.target.closest('.cor'); if (b) copiar(b.dataset.c); });
+
+function peca(src, nome, mono, alvo) {
+  const el = document.createElement('div'); el.className = 'peca';
+  el.innerHTML = `<div class="quadro${mono ? ' mono' : ''}">${mono ? '' : `<img src="${src}" alt="${esc(nome)}" loading="lazy">`}</div>
+    <div class="nome"><span>${esc(nome)}</span><a href="${src}" download>baixar</a></div>`;
+  if (mono) fetch(src).then((r) => r.text()).then((svg) => { el.querySelector('.quadro').innerHTML = svg; });
+  alvo.appendChild(el);
+}
+fetch('logos/logotipo-odisse.svg').then((r) => r.text()).then((svg) => {
+  $('logo-topo').innerHTML = svg.replace('<svg ', '<svg style="width:100%;height:100%" ');
+});
+LOGOS.forEach(([f, n, m]) => peca('logos/' + f, n, m, $('lista-logos')));
+SELOS.forEach(([f, n]) => peca('selos/' + f + '.svg', n, true, $('lista-selos')));
+FAVICON.forEach((f) => peca('favicon/' + f, f, false, $('lista-favicon')));
+
+fetch('odisse.json').then((r) => r.json()).then((d) => {
+  const link = (u, t) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t || u)}</a>`;
+  const e = d.endereco;
+  const linhas = [
+    ['Nome', esc(d.nome_completo)],
+    ['Descrição', esc(d.descricao)],
+    ['Fundadores', esc(d.fundadores.join(' e '))],
+    ['E-mail', link('mailto:' + d.contato.email, d.contato.email)],
+    ['Telefone e WhatsApp', link(d.contato.whatsapp_link, d.contato.telefone)],
+    ['Endereço', esc(`${e.logradouro}, ${e.bairro} · ${e.cidade}/${e.uf} · CEP ${e.cep} · Caixa postal ${e.caixa_postal}`)],
+    ['Redes', Object.entries(d.redes).map(([k, u]) => link(u, ({ instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', substack: 'Substack' })[k] || k)).join(' · ')],
+    ['Sites', Object.entries(d.sites).map(([k, u]) => link(u, u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))).join(' · ')],
+    ['Núcleos', d.nucleos.map((n) => `<b>${esc(n.nome)}</b> — ${esc(n.conteudo)}`).join('<br>')],
+    ['Atualizado em', esc(d.atualizado)],
+  ];
+  $('tabela-dados').innerHTML = linhas.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('');
+});
+</script>
+</body>
+</html>
