@@ -5,6 +5,9 @@
 
   Uso:  <link rel="stylesheet" href="https://marca.odisse.com.br/v1/marca.css">
 
+  Valores: seguem o odisse.json (paleta, papeis, nucleos[].cores). Quando a paleta muda pelo
+  Universo, o mesmo commit reescreve os valores aqui; a estrutura do arquivo não muda.
+
   Regra de versão: ajustes compatíveis (afinar um valor) entram aqui mesmo.
   Renomear ou remover uma variável = nova pasta v2/, e esta continua no ar.
 */

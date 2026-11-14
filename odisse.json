@@ -41,22 +41,213 @@
     {
       "id": "estudio",
       "nome": "Odisse Estúdio",
-      "conteudo": "Pessoas, obras e bastidores"
+      "sigla": "OE",
+      "marca_mae": true,
+      "conteudo": "Pessoas, obras e bastidores",
+      "conteudo_en": "",
+      "cores": {
+        "fundo": "papel",
+        "painel": "ardosia",
+        "veu": "ardosia"
+      },
+      "sites": [],
+      "redes": [],
+      "selo": {
+        "nome": "Mão",
+        "arquivo": "selos/mao.svg",
+        "uso": "Assina o Estúdio e todo post único, de qualquer núcleo",
+        "uso_en": ""
+      },
+      "logos": [
+        {
+          "nome": "Estúdio completo",
+          "arquivo": "logos/odisse-estudio-completo.svg"
+        },
+        {
+          "nome": "Estúdio 01",
+          "arquivo": "logos/logotipo-odisse.svg",
+          "mono": true
+        },
+        {
+          "nome": "Estúdio 02",
+          "arquivo": "logos/odisse-estudio-02.svg"
+        }
+      ]
     },
     {
       "id": "arquitetos",
       "nome": "Odisse Arquitetos",
-      "conteudo": "Projetos de arquitetura e interiores"
+      "sigla": "OA",
+      "conteudo": "Projetos de arquitetura e interiores",
+      "conteudo_en": "",
+      "cores": {
+        "fundo": "papel",
+        "painel": "areia",
+        "veu": "ardosia"
+      },
+      "sites": [
+        "projetos"
+      ],
+      "redes": [],
+      "selo": {
+        "nome": "Roda",
+        "arquivo": "selos/roda.svg",
+        "uso": "Carrosséis de projeto",
+        "uso_en": ""
+      },
+      "logos": [
+        {
+          "nome": "Arquitetos 01",
+          "arquivo": "logos/odisse-arquitetos-01.svg"
+        }
+      ]
     },
     {
       "id": "objetos",
       "nome": "Odisse Objetos",
-      "conteudo": "Peças autorais e loja"
+      "sigla": "OO",
+      "conteudo": "Peças autorais e loja",
+      "conteudo_en": "",
+      "cores": {
+        "fundo": "papel",
+        "painel": "grafite",
+        "veu": "grafite"
+      },
+      "sites": [
+        "objetos"
+      ],
+      "redes": [],
+      "selo": {
+        "nome": "Flor",
+        "arquivo": "selos/flor.svg",
+        "uso": "Peças e loja",
+        "uso_en": ""
+      },
+      "logos": [
+        {
+          "nome": "Objetos 01",
+          "arquivo": "logos/odisse-objetos-01.svg"
+        }
+      ]
     },
     {
       "id": "elaia",
       "nome": "Odisse Elaia",
-      "conteudo": "Ensaios e podcast"
+      "sigla": "EL",
+      "conteudo": "Ensaios e podcast",
+      "conteudo_en": "",
+      "cores": {
+        "fundo": "papel",
+        "painel": "pessego",
+        "veu": "terra"
+      },
+      "sites": [],
+      "redes": [
+        "substack"
+      ],
+      "selo": {
+        "nome": "Sol",
+        "arquivo": "selos/sol.svg",
+        "uso": "Ensaios e podcast",
+        "uso_en": ""
+      },
+      "logos": [
+        {
+          "nome": "Elaia 01",
+          "arquivo": "logos/odisse-elaia-01.svg"
+        },
+        {
+          "nome": "Elaia 02",
+          "arquivo": "logos/odisse-elaia-02.svg"
+        }
+      ]
+    }
+  ],
+  "papeis": {
+    "fundo": "papel",
+    "tinta": "ardosia",
+    "tinta_sobre_escuro": "branco"
+  },
+  "paleta": [
+    {
+      "id": "ardosia",
+      "nome": "Ardósia",
+      "valor": "#3F4B57",
+      "principal": true,
+      "funcao": "Tinta de tudo; painel e véu do Estúdio; véu do Arquitetos",
+      "funcao_en": ""
+    },
+    {
+      "id": "papel",
+      "nome": "Papel",
+      "valor": "#FAFAF7",
+      "principal": true,
+      "funcao": "Fundo de tudo; fundo de todos os núcleos",
+      "funcao_en": ""
+    },
+    {
+      "id": "areia",
+      "nome": "Areia",
+      "valor": "#E3D9C6",
+      "principal": false,
+      "funcao": "Painel do Arquitetos",
+      "funcao_en": ""
+    },
+    {
+      "id": "nevoa",
+      "nome": "Névoa",
+      "valor": "#E6E8EB",
+      "principal": false,
+      "funcao": "Luz do duotone do Estúdio",
+      "funcao_en": ""
+    },
+    {
+      "id": "grafite",
+      "nome": "Grafite",
+      "valor": "#2E3036",
+      "principal": false,
+      "funcao": "Painel e véu do Objetos",
+      "funcao_en": ""
+    },
+    {
+      "id": "pessego",
+      "nome": "Pêssego",
+      "valor": "#F2DDBE",
+      "principal": false,
+      "funcao": "Painel da Elaia",
+      "funcao_en": ""
+    },
+    {
+      "id": "ocre",
+      "nome": "Ocre",
+      "valor": "#BB8248",
+      "principal": false,
+      "funcao": "Meio-tom da Elaia; Matéria Bruta. Só em títulos grandes",
+      "funcao_en": ""
+    },
+    {
+      "id": "ambar",
+      "nome": "Âmbar",
+      "valor": "#ECC28F",
+      "principal": false,
+      "funcao": "Luz do duotone da Elaia",
+      "funcao_en": ""
+    },
+    {
+      "id": "terra",
+      "nome": "Terra",
+      "valor": "#4A3726",
+      "principal": false,
+      "funcao": "Véu da Elaia",
+      "funcao_en": ""
+    },
+    {
+      "id": "branco",
+      "nome": "Branco",
+      "valor": "#FFFFFF",
+      "principal": false,
+      "funcao": "Tinta sobre ardósia, grafite e terra",
+      "funcao_en": ""
     }
   ]
 }

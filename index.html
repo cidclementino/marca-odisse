@@ -91,13 +91,13 @@
 
   <section id="logos">
     <h2>Logos</h2>
-    <p class="lead">O logo completo, os logotipos de uma cor (assumem a cor do texto ao redor quando colados no HTML) e as assinaturas quadradas de cada núcleo.</p>
+    <p class="lead">Logos de cada núcleo, na ordem do <code>odisse.json</code>. Os de uma cor (como o Estúdio 01) assumem a cor do texto ao redor quando colados no HTML.</p>
     <div class="grade" id="lista-logos"></div>
   </section>
 
   <section id="selos">
     <h2>Selos</h2>
-    <p class="lead">Um selo por núcleo, em uma cor: mão (Estúdio), roda (Arquitetos), flor (Objetos), sol (Elaia).</p>
+    <p class="lead">Um selo por núcleo, em uma cor: Mão (Estúdio e posts únicos), Roda (Arquitetos), Flor (Objetos), Sol (Elaia).</p>
     <div class="grade" id="lista-selos"></div>
   </section>
 
@@ -131,29 +131,14 @@ link.href = odisse.contato.whatsapp_link;</pre>
 <div class="aviso" id="aviso"></div>
 
 <script>
-const CORES = [
-  ['ardosia', 'Ardósia', '#3F4B57'], ['papel', 'Papel', '#FAFAF7'], ['areia', 'Areia', '#E3D9C6'],
-  ['nevoa', 'Névoa', '#E6E8EB'], ['grafite', 'Grafite', '#2E3036'], ['pessego', 'Pêssego', '#F2DDBE'],
-  ['ocre', 'Ocre', '#BB8248'], ['ambar', 'Âmbar', '#ECC28F'], ['terra', 'Terra', '#4A3726'], ['branco', 'Branco', '#FFFFFF'],
-];
-const LOGOS = [
-  ['odisse.svg', 'Logo completo', false],
-  ['logotipo-odisse.svg', 'Logotipo Odisse', true],
-  ['logotipo-elaia.svg', 'Logotipo Elaia', true],
-  ['odisse-estudio-01.svg', 'Estúdio 01', false], ['odisse-estudio-02.svg', 'Estúdio 02', false],
-  ['odisse-arquitetos-01.svg', 'Arquitetos 01', false], ['odisse-objetos-01.svg', 'Objetos 01', false],
-  ['odisse-elaia-01.svg', 'Elaia 01', false], ['odisse-elaia-02.svg', 'Elaia 02', false],
-];
-const SELOS = [['mao', 'Mão · Estúdio'], ['roda', 'Roda · Arquitetos'], ['flor', 'Flor · Objetos'], ['sol', 'Sol · Elaia']];
+// Tudo vem do odisse.json: paleta (com a função de cada cor), núcleos, logos e selos.
+// O Universo edita esse arquivo; esta página só mostra.
 const FAVICON = ['favicon.svg', 'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png', 'apple-touch-icon.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png'];
 
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function avisar(t) { const a = $('aviso'); a.textContent = t; a.classList.add('on'); clearTimeout(avisar.t); avisar.t = setTimeout(() => a.classList.remove('on'), 1600); }
 async function copiar(t) { try { await navigator.clipboard.writeText(t); avisar('Copiado: ' + t); } catch { avisar(t); } }
-
-$('lista-cores').innerHTML = CORES.map(([id, nome, hex]) =>
-  `<button class="cor" data-c="${hex}"><span class="amostra" style="background:var(--odisse-${id})"></span><b>${nome}</b><small>${hex} · --odisse-${id}</small></button>`).join('');
 $('lista-cores').addEventListener('click', (e) => { const b = e.target.closest('.cor'); if (b) copiar(b.dataset.c); });
 
 function peca(src, nome, mono, alvo) {
@@ -166,11 +151,14 @@ function peca(src, nome, mono, alvo) {
 fetch('logos/logotipo-odisse.svg').then((r) => r.text()).then((svg) => {
   $('logo-topo').innerHTML = svg.replace('<svg ', '<svg style="width:100%;height:100%" ');
 });
-LOGOS.forEach(([f, n, m]) => peca('logos/' + f, n, m, $('lista-logos')));
-SELOS.forEach(([f, n]) => peca('selos/' + f + '.svg', n, true, $('lista-selos')));
 FAVICON.forEach((f) => peca('favicon/' + f, f, false, $('lista-favicon')));
 
-fetch('odisse.json').then((r) => r.json()).then((d) => {
+fetch('odisse.json', { cache: 'no-cache' }).then((r) => r.json()).then((d) => {
+  $('lista-cores').innerHTML = (d.paleta || []).map((c) =>
+    `<button class="cor" data-c="${esc(c.valor)}"><span class="amostra" style="background:var(--odisse-${esc(c.id)})"></span><b>${esc(c.nome)}</b><small>${esc(c.valor)} · --odisse-${esc(c.id)}</small><small>${esc(c.funcao)}</small></button>`).join('');
+  (d.nucleos || []).forEach((n) => (n.logos || []).forEach((l) => peca(l.arquivo, l.nome, !!l.mono, $('lista-logos'))));
+  (d.nucleos || []).forEach((n) => n.selo && peca(n.selo.arquivo, `${n.selo.nome} · ${n.nome.replace(/^Odisse /, '')}`, true, $('lista-selos')));
+
   const link = (u, t) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t || u)}</a>`;
   const e = d.endereco;
   const linhas = [
@@ -179,10 +167,10 @@ fetch('odisse.json').then((r) => r.json()).then((d) => {
     ['Fundadores', esc(d.fundadores.join(' e '))],
     ['E-mail', link('mailto:' + d.contato.email, d.contato.email)],
     ['Telefone e WhatsApp', link(d.contato.whatsapp_link, d.contato.telefone)],
-    ['Endereço', esc(`${e.logradouro}, ${e.bairro} · ${e.cidade}/${e.uf} · CEP ${e.cep} · Caixa postal ${e.caixa_postal}`)],
+    ['Endereço', esc(`${e.logradouro}, ${e.bairro} · ${e.cidade}/${e.uf} · CEP ${e.cep}`) + (e.caixa_postal ? ' · Caixa postal ' + esc(e.caixa_postal) : '')],
     ['Redes', Object.entries(d.redes).map(([k, u]) => link(u, ({ instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', substack: 'Substack' })[k] || k)).join(' · ')],
     ['Sites', Object.entries(d.sites).map(([k, u]) => link(u, u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))).join(' · ')],
-    ['Núcleos', d.nucleos.map((n) => `<b>${esc(n.nome)}</b> — ${esc(n.conteudo)}`).join('<br>')],
+    ['Núcleos', d.nucleos.map((n) => `<b>${esc(n.nome)}</b> (${esc(n.sigla || '')}) — ${esc(n.conteudo)}`).join('<br>')],
     ['Atualizado em', esc(d.atualizado)],
   ];
   $('tabela-dados').innerHTML = linhas.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('');
