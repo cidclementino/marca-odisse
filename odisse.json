@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "atualizado": "2026-11-11",
+  "atualizado": "2026-11-13",
   "nome": "Odisse",
   "nome_completo": "Odisse, Estúdio de Arquitetura e Design",
   "nome_completo_en": "Odisse, Architecture and Design Studio",
@@ -33,7 +33,7 @@
   },
   "sites": {
     "institucional": "https://www.odisse.com.br/",
-    "projetos": "https://projetos.odisse.com.br/",
+    "projetos": "https://servicos.odisse.com.br/",
     "herma": "https://herma.odisse.com.br/",
     "objetos": "https://www.odisseobjetos.com/"
   },
