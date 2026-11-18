@@ -1,0 +1,76 @@
+/*
+  Documentos Odisse — v1
+  Folhas A4 da marca: Coluna (comunicados) e Ficha (fichas, levantamentos, cartas com tabela de campos).
+  O desenho fica aqui e em documentos.js; o conteúdo vem de cada ferramenta.
+
+  Uso:  <link rel="stylesheet" href="https://marca.odisse.com.br/v1/documentos/documentos.css">
+        import { recursos, montar, imprimir } from 'https://marca.odisse.com.br/v1/documentos/documentos.js';
+
+  Medidas em px de tela (96 px/pol): a folha tem 794 × 1123 px = 210 × 297 mm.
+*/
+
+@import url('../marca.css');
+
+.odd-folha {
+  position: relative;
+  width: 794px;
+  height: 1123px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--odisse-papel);
+  color: var(--odisse-tinta);
+  font-family: var(--odisse-fonte);
+  font-optical-sizing: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.odd-folha * { box-sizing: border-box; }
+.odd-folha svg { display: block; }
+
+.odd-abs { position: absolute; }
+.odd-pequeno { font-size: 12px; line-height: 17px; }
+.odd-ponto { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--odisse-tinta); }
+.odd-filete { position: absolute; height: 1px; background: var(--odisse-tinta); }
+
+/* rótulo dos campos: maiúsculas pequenas */
+.odd-rotulo { font-size: 10px; line-height: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; margin-bottom: 3px; }
+.odd-valor { white-space: pre-line; overflow-wrap: anywhere; }
+
+/* campos da Coluna: duas colunas (220 | 234) e linhas largas embaixo */
+.odd-campos-coluna { display: grid; grid-template-columns: 220px 234px; column-gap: 20px; row-gap: 24px; }
+.odd-campos-coluna .odd-pilha { display: flex; flex-direction: column; gap: 12px; }
+.odd-campos-coluna .odd-largo { grid-column: 1 / -1; }
+.odd-campos-coluna .odd-largo .odd-valor { font-weight: 600; }
+
+/* tabela da Ficha: caixa fechada, campos que quebram linha */
+.odd-tabela { display: grid; border: 1px solid var(--odisse-tinta); font-size: 12px; line-height: 17px; }
+.odd-tabela > div { padding: 10px; min-height: 52px; }
+.odd-tabela > div + div { border-left: 1px solid var(--odisse-tinta); }
+.odd-tabela > .odd-largo { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--odisse-tinta); }
+.odd-tabela > .odd-largo .odd-valor { font-weight: 600; }
+
+/* corpo do texto */
+.odd-corpo { position: absolute; display: flex; flex-direction: column; gap: 15px; overflow: hidden;
+  font-size: 15px; line-height: 23px; text-wrap: pretty; hyphens: manual; }
+.odd-corpo > * { flex: none; margin: 0; }
+.odd-corpo .odd-titulo { font-size: 20px; line-height: 27px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 8px; }
+.odd-corpo .odd-fecho { margin-top: 8px; }
+.odd-corpo .odd-assinaturas { display: flex; flex-wrap: wrap; gap: 24px 48px; padding-top: 56px; }
+.odd-corpo .odd-assinaturas b { font-weight: 600; }
+.odd-corpo .odd-anexos { font-size: 12px; line-height: 17px; padding-top: 8px; white-space: pre-line; }
+
+/* quadrícula de pontos (5 mm, ponto maior a cada 25 mm) */
+.odd-pontos { position: absolute;
+  background-image: radial-gradient(circle, var(--odisse-tinta) 1.4px, transparent 1.6px),
+                    radial-gradient(circle, #7C8792 .8px, transparent 1px); }
+
+/* ---- impressão: só as folhas, uma por página ---- */
+.odd-impressao { display: none; }
+@page { size: A4; margin: 0; }
+@media print {
+  body.odd-imprimindo > *:not(.odd-impressao) { display: none !important; }
+  body.odd-imprimindo { margin: 0 !important; padding: 0 !important; background: none !important; }
+  body.odd-imprimindo .odd-impressao { display: block; }
+  .odd-impressao .odd-folha { width: 210mm; height: 297mm; break-after: page; page-break-after: always; }
+  .odd-impressao .odd-folha:last-child { break-after: auto; page-break-after: auto; }
+}
