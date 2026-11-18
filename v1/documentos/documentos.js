@@ -12,10 +12,20 @@
 //     codigo: 'CA-2026-0001',                           // aparece nas folhas de continuação
 //     campos: [{ rotulo: 'Para', valor: 'Nome\nCargo' }, { rotulo: 'Assunto', valor: '…', largo: true }],
 //     titulo, saudacao, paragrafos: ['…'], fecho,
+//     blocos: [ … ],                                    // opcional, depois dos parágrafos (ver abaixo)
 //     assinaturas: [{ nome, cargo, registro, rubrica }], anexos,
 //       rubrica (opcional): endereço da imagem das iniciais, que sai abaixo da identificação; 'caixa' = só o
 //       lugar dela, tracejado (prévia: o PNG entra só na emissão); ausente = nada abaixo.
 //   }
+// Blocos (todos opcionais; texto simples também vale como parágrafo):
+//   { tipo: 'secao', texto }                            título de seção; não fica sozinho no pé da folha
+//   { tipo: 'paragrafo', texto, negrito }
+//   { tipo: 'lista', itens: ['…'], numerada }           travessão ou 1. 2. 3.; quebra entre itens e dentro deles
+//   { tipo: 'tabela', colunas: [{ titulo, alinhar, largura }], linhas: [['…', '…']], total: ['…'] }
+//       alinhar: 'esquerda' | 'centro' | 'direita'; largura em px (número) ou '30%'; quebra entre linhas,
+//       repete o cabeçalho, nunca deixa o cabeçalho com menos de duas linhas nem o total sozinho
+//   { tipo: 'clausula', numero, titulo, paragrafos: ['…'], itens: ['…'] }   cabeçalho preso ao primeiro parágrafo
+//   { tipo: 'nota', texto }                             texto pequeno (observações, ressalvas)
 // Coluna: o primeiro campo vai à esquerda, os outros empilhados à direita, os largos embaixo.
 // Ficha: o primeiro campo ocupa o espaço livre, os outros têm 132 px; os largos viram uma linha inteira.
 // Texto longo continua em novas folhas (quebra entre parágrafos e, se preciso, dentro do parágrafo).
@@ -199,11 +209,16 @@ function folhaFicha(rec, doc, primeira) {
 }
 
 // ---- texto em blocos ------------------------------------------------------------
+// Cada bloco do documento vira uma ou mais "unidades" de paginação:
+//   { texto, cls, marca }        texto que pode quebrar entre palavras (parágrafo, item de lista, nota)
+//   { html, inteiro, comProximo } peça que não quebra (títulos, assinaturas); comProximo = não fica sozinha no pé
+//   { tabela, linhas }           tabela: quebra entre linhas e repete o cabeçalho na folha seguinte
 function blocos(doc) {
   const b = [];
   if (doc.titulo) b.push({ html: `<h1 class="odd-titulo">${esc(doc.titulo)}</h1>`, inteiro: true, comProximo: true });
   if (doc.saudacao) b.push({ texto: doc.saudacao });
   for (const p of doc.paragrafos || []) if (String(p).trim()) b.push({ texto: String(p).trim() });
+  for (const x of doc.blocos || []) b.push(...unidades(x));
   const ass = (doc.assinaturas || []).filter((a) => a && (a.nome || a.cargo));
   if (doc.fecho || ass.length) {
     b.push({ inteiro: true, html: (doc.fecho ? `<p class="odd-fecho">${esc(doc.fecho)}</p>` : '') +
@@ -212,15 +227,81 @@ function blocos(doc) {
   if (doc.anexos) b.push({ inteiro: true, html: `<div class="odd-anexos"><b>Anexos</b>\n${esc(doc.anexos)}</div>` });
   return b;
 }
+const limpo = (t) => String(t ?? '').trim();
+const itensDe = (itens, numerada) => (itens || []).map(limpo).filter(Boolean)
+  .map((t, i) => ({ texto: t, cls: 'odd-item', marca: numerada ? `${i + 1}.` : '–' }));
+function unidades(x) {
+  if (x == null) return [];
+  if (typeof x === 'string') return limpo(x) ? [{ texto: limpo(x) }] : [];
+  switch (x.tipo || 'paragrafo') {
+    case 'paragrafo': return limpo(x.texto) ? [{ texto: limpo(x.texto), cls: x.negrito ? 'odd-negrito' : '' }] : [];
+    case 'nota': return limpo(x.texto) ? [{ texto: limpo(x.texto), cls: 'odd-nota' }] : [];
+    case 'secao': return limpo(x.texto) ? [{ html: `<h2 class="odd-secao">${esc(limpo(x.texto))}</h2>`, inteiro: true, comProximo: true }] : [];
+    case 'lista': return itensDe(x.itens, x.numerada);
+    case 'clausula': {
+      const cab = [x.numero ? `<span class="odd-num">${esc(limpo(x.numero))}</span>` : '', esc(limpo(x.titulo))].filter(Boolean).join(' – ');
+      const corpo = [...(x.paragrafos || []).map(limpo).filter(Boolean).map((t) => ({ texto: t })), ...itensDe(x.itens, x.numerada)];
+      return [...(cab ? [{ html: `<h3 class="odd-clausula">${cab}</h3>`, inteiro: true, comProximo: true }] : []), ...corpo];
+    }
+    case 'tabela': {
+      const linhas = (x.linhas || []).map((c) => ({ c }));
+      if (x.total) linhas.push({ c: x.total, total: true });
+      return linhas.length ? [{ tabela: x, linhas }] : [];
+    }
+    default: return limpo(x.texto) ? [{ texto: limpo(x.texto) }] : [];
+  }
+}
 // rubrica (iniciais) abaixo da identificação: imagem na emissão, caixa tracejada na prévia
 const rubrica = (a) => {
   if (a.rubrica === 'caixa') return '<span class="odd-rubrica odd-rubrica-caixa">rubrica</span>';
   if (typeof a.rubrica === 'string' && /^(https?:|blob:|data:image\/)/.test(a.rubrica)) return `<img class="odd-rubrica" src="${esc(a.rubrica)}" alt="">`;
   return '';
 };
+// texto: <p class> [marca] <span>texto</span> — o span é o que encurta na quebra de folha
+function pDe(bl, texto = bl.texto) {
+  const p = el('p', bl.cls || '');
+  if (bl.continua) p.classList.add('odd-continua');
+  if (bl.marca && !bl.continua) p.append(el('span', 'odd-marca', {}, esc(bl.marca)));
+  const s = document.createElement('span'); s.textContent = texto; p.append(s);
+  p._txt = s;
+  return p;
+}
+// tabela: colunas [{ titulo, alinhar: 'esquerda' | 'centro' | 'direita', largura }], largura em px ou '30%'
+const ALINHA = { direita: 'odd-dir', centro: 'odd-centro' };
+function tabelaDe(t) {
+  const tb = el('table', 'odd-tab');
+  const cols = t.colunas || [];
+  if (cols.some((c) => c.largura)) {
+    const cg = document.createElement('colgroup');
+    cols.forEach((c) => { const col = document.createElement('col'); if (c.largura) col.style.width = typeof c.largura === 'number' ? px(c.largura) : c.largura; cg.append(col); });
+    tb.append(cg); tb.style.tableLayout = 'fixed';
+  }
+  if (cols.some((c) => c.titulo)) {
+    const th = document.createElement('thead');
+    th.innerHTML = `<tr>${cols.map((c) => `<th class="${ALINHA[c.alinhar] || ''}">${esc(c.titulo)}</th>`).join('')}</tr>`;
+    tb.append(th);
+  }
+  tb.append(document.createElement('tbody'));
+  tb._cols = cols;
+  return tb;
+}
+function linhaDe(tb, l) {
+  const tr = document.createElement('tr');
+  if (l.total) tr.className = 'odd-total';
+  const n = Math.max(tb._cols.length, l.c.length);
+  for (let i = 0; i < n; i++) {
+    const td = document.createElement('td');
+    const cl = ALINHA[tb._cols[i]?.alinhar]; if (cl) td.className = cl;
+    td.textContent = l.c[i] ?? '';
+    tr.append(td);
+  }
+  tb.tBodies[0].append(tr);
+  return tr;
+}
 const noDe = (bl) => {
+  if (bl.tabela) { const tb = tabelaDe(bl.tabela); bl.linhas.slice(0, 2).forEach((l) => linhaDe(tb, l)); return tb; }
   if (bl.html) { const d = el('div'); d.innerHTML = bl.html; return d.childElementCount === 1 ? d.firstElementChild : d; }
-  const p = el('p'); p.textContent = bl.texto; return p;
+  return pDe(bl);
 };
 const transborda = (c) => c.scrollHeight > c.clientHeight + 0.5;
 
@@ -253,6 +334,23 @@ export async function montar(alvo, doc, rec) {
     let corpo = folhas[0]._corpo;
     while (fila.length) {
       const bl = fila.shift();
+      if (bl.tabela) {
+        // tabela: linha a linha; o cabeçalho nunca fica sozinho (pelo menos duas linhas com ele)
+        const tb = tabelaDe(bl.tabela); corpo.append(tb);
+        let k = 0;
+        for (; k < bl.linhas.length; k++) {
+          const tr = linhaDe(tb, bl.linhas[k]);
+          if (transborda(corpo)) { tr.remove(); break; }
+        }
+        if (k === bl.linhas.length) continue;
+        if (k < Math.min(2, bl.linhas.length) && corpo.childElementCount > 1) { tb.remove(); fila.unshift(bl); corpo = proxima(); continue; }
+        if (k === 0) { linhaDe(tb, bl.linhas[0]); k = 1; } // nem numa folha vazia cabe: vai assim mesmo
+        // o total não vai sozinho para a folha seguinte
+        if (bl.linhas.length - k === 1 && bl.linhas[k].total && k > 1) { tb.tBodies[0].lastChild.remove(); k--; }
+        fila.unshift({ ...bl, linhas: bl.linhas.slice(k) });
+        corpo = proxima();
+        continue;
+      }
       const no = noDe(bl);
       corpo.append(no);
       if (!transborda(corpo)) {
@@ -268,16 +366,16 @@ export async function montar(alvo, doc, rec) {
       if (bl.texto) {
         // parte do parágrafo que cabe nesta folha
         const palavras = bl.texto.split(/\s+/);
-        const p = el('p'); corpo.append(p);
+        const p = pDe(bl, ''); corpo.append(p);
         let lo = 0, hi = palavras.length;
         while (lo < hi) {
           const meio = Math.ceil((lo + hi) / 2);
-          p.textContent = palavras.slice(0, meio).join(' ');
+          p._txt.textContent = palavras.slice(0, meio).join(' ');
           if (transborda(corpo)) hi = meio - 1; else lo = meio;
         }
         if (lo >= 3 || (lo > 0 && corpo.childElementCount === 1)) {
-          p.textContent = palavras.slice(0, lo).join(' ');
-          fila.unshift({ texto: palavras.slice(lo).join(' ') });
+          p._txt.textContent = palavras.slice(0, lo).join(' ');
+          fila.unshift({ ...bl, texto: palavras.slice(lo).join(' '), continua: true });
         } else {
           p.remove();
           fila.unshift(bl);

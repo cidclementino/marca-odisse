@@ -48,6 +48,8 @@ O desenho mora aqui; o conteúdo, em cada ferramenta (o Universo guarda cartas, 
 - **Ficha**: assinatura horizontal no topo, tabela de campos fechada (o primeiro campo ocupa o espaço livre; os largos viram uma linha inteira), corpo ou quadrícula de pontos de 5 mm, rodapé com contatos e a Mão.
 - Seis pontos laterais (três de cada lado, na meia-margem), como no site e nos posts.
 - Texto longo continua em novas folhas: quebra entre parágrafos e, se preciso, dentro do parágrafo.
+- **Blocos** (`doc.blocos`): seção, parágrafo (com opção negrito), lista (travessão ou numerada), tabela (alinhamento e largura por coluna, linha de total), cláusula (número, título, parágrafos e itens) e nota. A tabela quebra entre linhas e repete o cabeçalho; título de seção e de cláusula não ficam sozinhos no pé.
+- Os modelos são vistos e conferidos no Universo, em Biblioteca › Documentos; este site não mostra os documentos.
 - Folha de 794 × 1123 px (A4 a 96 px/pol). Na impressão, `@page { size: A4; margin: 0 }`.
 
 ## Regras
