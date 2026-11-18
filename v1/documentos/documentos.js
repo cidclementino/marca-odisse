@@ -12,7 +12,9 @@
 //     codigo: 'CA-2026-0001',                           // aparece nas folhas de continuação
 //     campos: [{ rotulo: 'Para', valor: 'Nome\nCargo' }, { rotulo: 'Assunto', valor: '…', largo: true }],
 //     titulo, saudacao, paragrafos: ['…'], fecho,
-//     assinaturas: [{ nome, cargo, registro }], anexos,
+//     assinaturas: [{ nome, cargo, registro, rubrica }], anexos,
+//       rubrica (opcional): endereço da imagem das iniciais, que sai abaixo da identificação; 'caixa' = só o
+//       lugar dela, tracejado (prévia: o PNG entra só na emissão); ausente = nada abaixo.
 //   }
 // Coluna: o primeiro campo vai à esquerda, os outros empilhados à direita, os largos embaixo.
 // Ficha: o primeiro campo ocupa o espaço livre, os outros têm 132 px; os largos viram uma linha inteira.
@@ -205,11 +207,17 @@ function blocos(doc) {
   const ass = (doc.assinaturas || []).filter((a) => a && (a.nome || a.cargo));
   if (doc.fecho || ass.length) {
     b.push({ inteiro: true, html: (doc.fecho ? `<p class="odd-fecho">${esc(doc.fecho)}</p>` : '') +
-      (ass.length ? `<div class="odd-assinaturas">${ass.map((a) => `<div>${a.nome ? `<b>${esc(a.nome)}</b><br>` : ''}${[a.cargo, a.registro].filter(Boolean).map(esc).join(' · ')}</div>`).join('')}</div>` : '') });
+      (ass.length ? `<div class="odd-assinaturas">${ass.map((a) => `<div>${a.nome ? `<b>${esc(a.nome)}</b><br>` : ''}${[a.cargo, a.registro].filter(Boolean).map(esc).join(' · ')}${rubrica(a)}</div>`).join('')}</div>` : '') });
   }
   if (doc.anexos) b.push({ inteiro: true, html: `<div class="odd-anexos"><b>Anexos</b>\n${esc(doc.anexos)}</div>` });
   return b;
 }
+// rubrica (iniciais) abaixo da identificação: imagem na emissão, caixa tracejada na prévia
+const rubrica = (a) => {
+  if (a.rubrica === 'caixa') return '<span class="odd-rubrica odd-rubrica-caixa">rubrica</span>';
+  if (typeof a.rubrica === 'string' && /^(https?:|blob:|data:image\/)/.test(a.rubrica)) return `<img class="odd-rubrica" src="${esc(a.rubrica)}" alt="">`;
+  return '';
+};
 const noDe = (bl) => {
   if (bl.html) { const d = el('div'); d.innerHTML = bl.html; return d.childElementCount === 1 ? d.firstElementChild : d; }
   const p = el('p'); p.textContent = bl.texto; return p;
@@ -295,6 +303,8 @@ export async function imprimir(doc, rec, nomeArquivo) {
   document.body.append(caixa);
   try {
     await montar(caixa, doc, rec);
+    // as rubricas precisam estar carregadas antes de abrir a impressão
+    await Promise.all([...caixa.querySelectorAll('img')].map((i) => i.decode().catch(() => {})));
     caixa.style.cssText = '';
     const titulo = document.title;
     if (nomeArquivo) document.title = nomeArquivo;

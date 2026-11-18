@@ -57,6 +57,11 @@
 .odd-corpo .odd-fecho { margin-top: 8px; }
 .odd-corpo .odd-assinaturas { display: flex; flex-wrap: wrap; gap: 24px 48px; padding-top: 56px; }
 .odd-corpo .odd-assinaturas b { font-weight: 600; }
+/* rubrica: abaixo da identificação, alinhada à esquerda; mesma caixa na prévia e na emissão (a paginação não muda) */
+.odd-corpo .odd-rubrica { display: block; box-sizing: border-box; width: 120px; height: 40px; margin-top: 10px;
+  object-fit: contain; object-position: left center; }
+.odd-corpo .odd-rubrica-caixa { border: 1px dashed currentColor; border-radius: 2px; opacity: .45;
+  font-size: 9px; line-height: 38px; letter-spacing: .08em; text-transform: uppercase; text-align: center; }
 .odd-corpo .odd-anexos { font-size: 12px; line-height: 17px; padding-top: 8px; white-space: pre-line; }
 
 /* quadrícula de pontos (5 mm, ponto maior a cada 25 mm) */
