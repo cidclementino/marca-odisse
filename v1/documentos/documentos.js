@@ -4,6 +4,7 @@
 //   const rec = await recursos();                       // odisse.json + logos (guardados em memória)
 //   const n = await montar(elemento, doc, rec);         // desenha as folhas dentro de `elemento` (precisa estar na página)
 //   await imprimir(doc, rec, 'CA-2026-0001');           // abre a impressão (Salvar como PDF) só com as folhas
+//   MODELOS                                             // folhas disponíveis ({ id, nome, descricao }); PDF direto: pdf.js
 //
 // O documento (`doc`) diz só o conteúdo; a folha é decidida aqui:
 //   {
@@ -421,3 +422,10 @@ export async function imprimir(doc, rec, nomeArquivo) {
 }
 
 export const MEDIDAS = { L, A, M, UTIL, COLUNA, FICHA, CORPO };
+
+// Modelos de folha que um documento de texto pode usar. As ferramentas listam daqui (a proposta, por ex.,
+// deixa escolher na prévia): modelo novo entra nesta lista e aparece em todas, sem mexer nelas.
+export const MODELOS = [
+  { id: 'coluna', nome: 'Coluna', descricao: 'Logotipo na coluna da esquerda; campos e texto à direita' },
+  { id: 'ficha', nome: 'Ficha', descricao: 'Assinatura no topo e tabela de campos fechada' },
+];
